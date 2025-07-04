@@ -5,7 +5,7 @@ import Controls from "./component/Controls/Controls";
 
 function App() {
 
-  const [messages, setMessages] = useState(MESSAGES);
+const [messages, setMessages] = useState([]); 
   return (
     <div className={styles.App}>
       <header className={styles.header}>
@@ -20,85 +20,5 @@ function App() {
     </div>
   );
 }
-
-const MESSAGES = [
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-  {
-    role: 'user',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-
-  {
-    role: 'assistant',
-    content:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare augue at vulputate commodo.",
-  },
-];
 
 export default App;

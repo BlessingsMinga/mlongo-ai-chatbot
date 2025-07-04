@@ -1,10 +1,16 @@
 import React from 'react'
 import styles from "./Chat.module.css";
 
+const WELCOME_MESSAGE = {
+  role: "assistant",
+  content: "Takulandilani...."
+
+}
+
 const Chat = ({messages}) => {
   return (
     <div className={styles.Chat}>
-        {messages.map(({
+        {[WELCOME_MESSAGE, ...messages].map(({
             role, content}, index) => 
         (
             <div key={index} data-role={role} 

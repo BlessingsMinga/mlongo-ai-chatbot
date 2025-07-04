@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from './Controls.module.css'
 
 const Controls = () => {
+
+  const [content, setContent] = useState(""); 
+
+  function handleContentChange(event) {
+    setContent(event.target.value);
+  }
+
+  function handleContentSend() {
+    if (content.length > 0) {
+      
+    }
+  }
+  
+  
   return (
     <div className={styles.Controls}>
       <div className={styles.TextAreaContainer}>
-        <textarea className={styles.TextArea} placeholder="Funsani Mlongo..."></textarea>
+        <textarea className={styles.TextArea} 
+        placeholder="Funsani Mlongo..."
+        value={content}
+        ></textarea>
       </div>
       <button className={styles.Button}>
         <SendIcon />
