@@ -4,25 +4,32 @@ import styles from './Controls.module.css';
 const Controls = ({ onSend }) => {
   const [content, setContent] = useState("");
 
-  function handleContentChange(event) {
+  const handleContentChange = (event) => {
     setContent(event.target.value);
-  }
+    // Auto-resize textarea based on content
+    event.target.style.height = 'auto';
+    event.target.style.height = `${event.target.scrollHeight}px`;
+  };
 
-  function handleContentSend() {
+  const handleContentSend = () => {
     const trimmedContent = content.trim();
     if (trimmedContent.length > 0) {
       onSend(trimmedContent);
-      setContent(""); // Clear the content after sending
+      setContent("");
+      // Reset textarea height after sending
+      const textarea = document.querySelector(`.${styles.TextArea}`);
+      if (textarea) {
+        textarea.style.height = 'auto';
+      }
     }
-  }
-  
+  };
 
-  function handleKeyDown(event) {
+  const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // Prevent new line on Enter key
+      event.preventDefault();
       handleContentSend();
     }
-  }
+  };
 
   return (
     <div className={styles.Controls}>
@@ -34,12 +41,13 @@ const Controls = ({ onSend }) => {
           onChange={handleContentChange}
           onKeyDown={handleKeyDown}
           rows={1}
+          aria-label="Type your message"
         />
       </div>
       <button 
-        className={styles.Button} 
+        className={`${styles.Button} ${!content.trim() ? styles.Disabled : ''}`}
         onClick={handleContentSend}
-        disabled={!content.trim()} // Disable when empty
+        disabled={!content.trim()}
         aria-label="Send message"
       >
         <SendIcon />
@@ -54,7 +62,7 @@ const SendIcon = () => (
     height="24px"
     viewBox="0 -960 960 960"
     width="24px"
-    fill="#5f6368"
+    fill="currentColor"
   >
     <path d="M120-160v-240l320-80-320-80v-240l760 320-760 320Z" />
   </svg>

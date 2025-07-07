@@ -20,7 +20,7 @@
     outline: none;
     resize: none;
     background: #ffffff;
-    color:rgb(20, 20, 20);
+    color:rgb(0, 0, 0);
 }
 
 .Button {
@@ -32,9 +32,30 @@
     border: none;
     border-radius: 50%;
     outline: none;
-    background: #0d0d0d;
+    background:rgb(0, 0, 0);
 }
 
 .Button svg {
-    fill : #f3f3f3;
+    fill :rgb(255, 255, 255);
+}
+
+
+
+/* Add these to your existing styles */
+.TextArea {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 44px;
+  max-height: 120px;
+  transition: height 0.2s ease;
+}
+
+.Button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.Disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

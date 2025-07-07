@@ -4,25 +4,52 @@ import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// Initialize Google Generative AI with API key from environment variables
 const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
 
-const gemini = googleai.getClient({ model: "gemini-1.5-flash" });
+// Get the Gemini model client
+const gemini = googleai.getGenerativeModel({ model: "gemini-1.5-flash" });
+// Start a new chat session
 const chat = gemini.startChat({ history: [] });
 
 function App() {
   const [messages, setMessages] = useState([]);
 
-  function handleContentSend(content) {
-    if (!content.trim()) return;  // Don't add empty messages
-    
+  function addMessage(newMessage) {
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  }
+
+  async function handleContentSend(content) {
+    if (!content.trim()) return; // Don't add empty messages
+
     // Add user message
     const newUserMessage = {
       role: "user",
       content: content
     };
-    
-    setMessages(prevMessages => [...prevMessages, newUserMessage]);
-    
+
+    addMessage(newUserMessage);
+
+    try {
+      // Send message to Gemini and get response
+      const result = await chat.sendMessage(content);
+      const response = await result.response;
+      const text = response.text();
+
+      // Add assistant's response
+      addMessage({
+        content: text,
+        role: "assistant"
+      });
+
+    } catch (error) {
+      console.error("Error sending message:", error);
+      // Add error message
+      addMessage({
+        content: "Pepani, yesani kachikena",
+        role: "system"
+      });
+    }
   }
 
   return (

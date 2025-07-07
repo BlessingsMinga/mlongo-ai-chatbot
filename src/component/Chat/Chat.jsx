@@ -3,19 +3,38 @@ import styles from "./Chat.module.css";
 
 const WELCOME_MESSAGE = {
   role: "assistant",
-  content: "Takulandilani...."
+  content: "Takulandilani! Ndine Mlongo AI Bot. Kodi mungandifunse chiyani?"
 };
 
-const Chat = ({ messages }) => {
+const Chat = ({ messages = [] }) => {
+  // Combine welcome message with conversation history
+  const allMessages = [WELCOME_MESSAGE, ...messages];
+
   return (
     <div className={styles.Chat}>
-      {[WELCOME_MESSAGE, ...messages].map(({ role, content }, index) => (
+      {allMessages.map(({ role, content }, index) => (
         <div 
-          key={index} 
-          data-role={role} 
-          className={styles.Message}
+          key={`${role}-${index}`} 
+          className={`${styles.Message} ${styles[`Message--${role}`]}`}
+          data-role={role}
         >
-          {content}
+          <div className={styles.MessageContent}>
+            {role === 'assistant' && (
+              <div className={styles.Avatar}>
+                <img 
+                  src="/assets/chat-bot.png" 
+                  alt="Mlongo AI Avatar"
+                  width={32}
+                  height={32}
+                />
+              </div>
+            )}
+            <div className={styles.Text}>
+              {content.split('\n').map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
         </div>
       ))}
     </div>
