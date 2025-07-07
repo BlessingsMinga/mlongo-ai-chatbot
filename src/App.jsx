@@ -2,6 +2,12 @@ import { useState } from "react";
 import styles from "./App.module.css";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
+
+const gemini = googleai.getClient({ model: "gemini-1.5-flash" });
+const chat = gemini.startChat({ history: [] });
 
 function App() {
   const [messages, setMessages] = useState([]);
