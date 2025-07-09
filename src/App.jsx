@@ -3,6 +3,7 @@ import styles from "./App.module.css";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Assistant } from "./assistants/openai";
 
 // Initialize Google Generative AI with API key from environment variables
 const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
@@ -32,7 +33,7 @@ function App() {
 
     try {
       // Send message to Gemini and get response
-      const result = await chat.sendMessage(content);
+      const result = await chat.sendMessage(content, messages);
       const response = await result.response;
       const text = response.text();
 
