@@ -1,9 +1,13 @@
 import { useState } from "react";
 import styles from "./App.module.css";
+import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Assistant } from "./assistants/openai";
+
+
+
 
 // Initialize Google Generative AI with API key from environment variables
 const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
@@ -15,6 +19,7 @@ const chat = gemini.startChat({ history: [] });
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   function addMessage(newMessage) {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -22,6 +27,7 @@ function App() {
 
   async function handleContentSend(content) {
     if (!content.trim()) return; // Don't add empty messages
+    setIsLoading(true); // Show loader while processing
 
     // Add user message
     const newUserMessage = {
@@ -34,7 +40,7 @@ function App() {
     try {
       // Send message to Gemini and get response
       const result = await chat.sendMessage(content, messages);
-      const response = await result.response;
+      const response = result.response;
       const text = response.text();
 
       // Add assistant's response
@@ -50,11 +56,15 @@ function App() {
         content: "Pepani, yesani kachikena",
         role: "system"
       });
+    } finally {
+      setIsLoading(false); // Hide loader after processing
     }
   }
 
   return (
     <div className={styles.App}>
+      {isLoading && <Loader />} 
+      
       <header className={styles.header}>
         <img 
           className={styles.Logo} 
