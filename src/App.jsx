@@ -6,9 +6,6 @@ import Controls from "./component/Controls/Controls";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Assistant } from "./assistants/openai";
 
-
-
-
 // Initialize Google Generative AI with API key from environment variables
 const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
 
@@ -63,8 +60,6 @@ function App() {
 
   return (
     <div className={styles.App}>
-      {isLoading && <Loader />} 
-      
       <header className={styles.header}>
         <img 
           className={styles.Logo} 
@@ -76,9 +71,15 @@ function App() {
       
       <div className={styles.ChatContainer}>
         <Chat messages={messages} />
+        {/* Position loader absolutely within ChatContainer */}
+        {isLoading && (
+          <div className={styles.LoaderOverlay}>
+            <Loader />
+          </div>
+        )}
       </div>
       
-      <Controls onSend={handleContentSend} />
+      <Controls onSend={handleContentSend} isLoading={isLoading} />
     </div>
   );
 }
