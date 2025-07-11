@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from "./Chat.module.css";
+import Markdown from 'react-markdown';
 
 const WELCOME_MESSAGE = {
   role: "assistant",
@@ -30,9 +31,9 @@ const Chat = ({ messages = [] }) => {
               </div>
             )}
             <div className={styles.Text}>
-              {content.split('\n').map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
+              <Markdown>
+                {content}
+              </Markdown>
             </div>
           </div>
         </div>

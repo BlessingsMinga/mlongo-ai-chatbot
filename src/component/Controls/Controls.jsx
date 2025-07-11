@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from './Controls.module.css';
 
-const Controls = ({ onSend }) => {
+const Controls = ({ isDisabled= false, onSend }) => {
   const [content, setContent] = useState("");
+  const textareaRef = useRef(null);
 
   const handleContentChange = (event) => {
     setContent(event.target.value);
@@ -10,6 +11,13 @@ const Controls = ({ onSend }) => {
     event.target.style.height = 'auto';
     event.target.style.height = `${event.target.scrollHeight}px`;
   };
+
+  useEffect(() => { 
+    if(!isDisabled) {
+      textareaRef.current?.focus();
+    }
+  }), [isDisabled];
+
 
   const handleContentSend = () => {
     const trimmedContent = content.trim();
@@ -35,6 +43,7 @@ const Controls = ({ onSend }) => {
     <div className={styles.Controls}>
       <div className={styles.TextAreaContainer}>
         <textarea
+        ref={textareaRef}
           className={styles.TextArea}
           placeholder="Funsani Mlongo..."
           value={content}
