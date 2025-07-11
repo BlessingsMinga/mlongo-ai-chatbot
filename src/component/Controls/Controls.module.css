@@ -10,7 +10,7 @@
     padding: 8px 16px;
     line-height: 0;
     border-radius: 16px;
-    background: #ffffff;
+    background: light-dark( #f3f3f3, #303030);
 }
 
 .TextArea {
@@ -19,8 +19,8 @@
     border: none;
     outline: none;
     resize: none;
-    background: #ffffff;
-    color:rgb(0, 0, 0);
+    background: light-dark( #f3f3f3, #303030);
+    color: light-dark(rgb(24, 24, 24),rgb(212, 212, 212));
 }
 
 .Button {
@@ -32,16 +32,18 @@
     border: none;
     border-radius: 50%;
     outline: none;
-    background:rgb(0, 0, 0);
+    background: light-dark( #0d0d0d, #ececec);
 }
 
 .Button svg {
-    fill :rgb(255, 255, 255);
+    fill : light-dark( #ececec, #0d0d0d);
+    width: 20px;
+    height: 20px;
+    transition: fill 0.2s ease;
 }
 
 
 
-/* Add these to your existing styles */
 .TextArea {
   resize: none;
   overflow-y: hidden;

@@ -7,7 +7,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #f3f3f3;
+    background: light-dark(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7)); /* Semi-transparent overlay */
+    z-index: 1000; 
     opacity: 0.6;
 }
 
@@ -24,6 +25,13 @@
     var(--g3) 100% 50%;
   background-size: calc(100%/3) 50%;
   animation: l3 1s infinite linear;
+}
+
+@media(prefers-color-scheme: dark) {
+  .LoaderWrapper {
+    opacity: 0.85;
+  }
+
 }
 
 @keyframes l3 {
