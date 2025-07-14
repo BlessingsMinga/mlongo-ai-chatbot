@@ -4,7 +4,6 @@ import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Assistant } from "./assistants/openai";
 
 // Initialize Google Generative AI with API key from environment variables
 const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
@@ -17,6 +16,17 @@ const chat = gemini.startChat({ history: [] });
 function App() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  function updateLastMessageContent(content) {
+    setMessages(prevMessages => 
+      prevMessages.map((message, index) => 
+        index === prevMessages.length - 1 
+          ? { ...message, content: `${message.content}${content}` } 
+          : message
+      )
+    );
+  }
 
   function addMessage(newMessage) {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -36,15 +46,24 @@ function App() {
 
     try {
       // Send message to Gemini and get response
-      const result = await chat.sendMessage(content, messages);
-      const response = result.response;
-      const text = response.text();
+      const result = await chat.sendMessageStream(content);
+      let isFirstChunk = true;
 
-      // Add assistant's response
-      addMessage({
-        content: text,
-        role: "assistant"
-      });
+      // Add assistant message placeholder
+      addMessage({ content: "", role: "assistant" });
+      
+      for await (const chunk of result.stream) {
+        if (isFirstChunk) {
+          isFirstChunk = false;
+          setIsLoading(false);
+          setIsStreaming(true);
+        }
+        
+        const chunkText = await chunk.text();
+        updateLastMessageContent(chunkText);
+      }
+
+      setIsStreaming(false);
 
     } catch (error) {
       console.error("Error sending message:", error);
@@ -53,8 +72,9 @@ function App() {
         content: "Pepani, yesani kachikena",
         role: "system"
       });
-    } finally {
-      setIsLoading(false); // Hide loader after processing
+
+      setIsLoading(false);
+      setIsStreaming(false);
     }
   }
 
@@ -79,7 +99,10 @@ function App() {
         )}
       </div>
       
-      <Controls onSend={handleContentSend} isLoading={isLoading} />
+      <Controls 
+        isDisabled={isLoading || isStreaming} 
+        onSend={handleContentSend}
+      />
     </div>
   );
 }
