@@ -3,15 +3,7 @@ import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// Initialize Google Generative AI with API key from environment variables
-const googleai = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
-
-// Get the Gemini model client
-const gemini = googleai.getGenerativeModel({ model: "gemini-1.5-flash" });
-// Start a new chat session
-const chat = gemini.startChat({ history: [] });
+import { Assistant } from "./assistants/deepseekai";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -45,24 +37,19 @@ function App() {
     addMessage(newUserMessage);
 
     try {
-      // Send message to Gemini and get response
-      const result = await chat.sendMessageStream(content);
-      let isFirstChunk = true;
-
       // Add assistant message placeholder
       addMessage({ content: "", role: "assistant" });
       
-      for await (const chunk of result.stream) {
-        if (isFirstChunk) {
-          isFirstChunk = false;
-          setIsLoading(false);
-          setIsStreaming(true);
-        }
-        
-        const chunkText = await chunk.text();
-        updateLastMessageContent(chunkText);
-      }
-
+      // Initialize DeepSeek assistant
+      const assistant = new Assistant();
+      const response = await assistant.chat(content);
+      
+      setIsLoading(false);
+      setIsStreaming(true);
+      
+      // Update message with the response
+      updateLastMessageContent(response);
+      
       setIsStreaming(false);
 
     } catch (error) {
