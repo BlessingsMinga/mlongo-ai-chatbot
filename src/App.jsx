@@ -3,7 +3,7 @@ import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
-import { Assistant } from "./assistants/deepseekai";
+import { Assistant } from "./assistants/googleai";
 
 function App() {
   const [messages, setMessages] = useState([]);
