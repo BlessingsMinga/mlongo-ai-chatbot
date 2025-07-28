@@ -3,7 +3,8 @@ import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
-import { Assistant } from "./assistants/googleai";
+// import { Assistant } from "./assistants/deepseekaiopenrouter";
+import { Assistant } from "./component/Assistant/Assistant";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -90,6 +91,8 @@ function App() {
         isDisabled={isLoading || isStreaming} 
         onSend={handleContentSend}
       />
+
+      <Assistant />
     </div>
   );
 }

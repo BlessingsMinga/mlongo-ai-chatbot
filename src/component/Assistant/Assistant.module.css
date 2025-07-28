@@ -1,0 +1,7 @@
+.Assistant {
+    disply: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    opacity: 0.8;
+}
