@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
-// import { Assistant } from "./assistants/deepseekaiopenrouter";
 import { Assistant } from "./component/Assistant/Assistant";
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [currentAssistant, setCurrentAssistant] = useState(null);
 
-  function updateLastMessageContent(content) {
+  const updateLastMessageContent = useCallback((content) => {
     setMessages(prevMessages => 
       prevMessages.map((message, index) => 
         index === prevMessages.length - 1 
@@ -19,52 +19,51 @@ function App() {
           : message
       )
     );
-  }
+  }, []);
 
-  function addMessage(newMessage) {
+  const addMessage = useCallback((newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
-  }
+  }, []);
 
-  async function handleContentSend(content) {
-    if (!content.trim()) return; // Don't add empty messages
-    setIsLoading(true); // Show loader while processing
+  const handleContentSend = useCallback(async (content) => {
+    if (!content.trim()) return;
+    
+    if (!currentAssistant) {
+      addMessage({
+        content: "Please select an assistant first",
+        role: "system"
+      });
+      return;
+    }
 
-    // Add user message
-    const newUserMessage = {
-      role: "user",
-      content: content
-    };
-
-    addMessage(newUserMessage);
+    setIsLoading(true);
+    addMessage({ role: "user", content });
+    addMessage({ content: "", role: "assistant" });
 
     try {
-      // Add assistant message placeholder
-      addMessage({ content: "", role: "assistant" });
-      
-      // Initialize DeepSeek assistant
-      const assistant = new Assistant();
-      const response = await assistant.chat(content);
+      const response = await currentAssistant.chat(content);
       
       setIsLoading(false);
       setIsStreaming(true);
-      
-      // Update message with the response
       updateLastMessageContent(response);
-      
       setIsStreaming(false);
-
     } catch (error) {
       console.error("Error sending message:", error);
-      // Add error message
       addMessage({
         content: "Pepani, yesani kachikena",
         role: "system"
       });
-
       setIsLoading(false);
       setIsStreaming(false);
     }
-  }
+  }, [currentAssistant, addMessage, updateLastMessageContent]);
+
+  const handleAssistantChange = useCallback((newAssistant) => {
+    // Only update if the assistant actually changed
+    setCurrentAssistant(prev => 
+      prev?.id === newAssistant?.id ? prev : newAssistant
+    );
+  }, []);
 
   return (
     <div className={styles.App}>
@@ -79,7 +78,6 @@ function App() {
       
       <div className={styles.ChatContainer}>
         <Chat messages={messages} />
-        {/* Position loader absolutely within ChatContainer */}
         {isLoading && (
           <div className={styles.LoaderOverlay}>
             <Loader />
@@ -92,7 +90,7 @@ function App() {
         onSend={handleContentSend}
       />
 
-      <Assistant />
+      <Assistant onAssistantChange={handleAssistantChange} />
     </div>
   );
 }

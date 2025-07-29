@@ -1,7 +1,58 @@
 .Assistant {
-    disply: flex;
-    justify-content: center;
+    display: flex;
+    align-items: center;
     gap: 10px;
     font-size: 14px;
-    opacity: 0.8;
+    opacity: 0.92;
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: rgba(46, 204, 0, 0.12);
+    border: 1px solid rgba(46, 204, 0, 0.22);
+    transition: background 0.2s, opacity 0.2s, border-color 0.2s;
+    position: relative;
+}
+
+.Assistant:hover {
+    opacity: 1;
+    background: rgba(46, 204, 0, 0.18);
+    border-color: #2ecc00;
+}
+
+.Assistant span {
+    color: #2ecc00;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-right: 4px;
+}
+
+.Assistant select {
+    color: #000;
+    background: #fff;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.Assistant select:focus {
+    border-color: #2ecc00;
+    outline: 2px solid rgba(46, 204, 0, 0.25);
+    outline-offset: 1px;
+}
+
+.Assistant select option {
+    color: #000;
+    background: #fff;
+}
+
+.Assistant::after {
+    content: "✓";
+    color: #2ecc00;
+    margin-left: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    pointer-events: none;
 }
