@@ -3,6 +3,7 @@ import { Assistant as OpenRouterAIAssistant } from "../../assistants/deepseekaio
 import { Assistant as DeepSeekAIAssistant } from "../../assistants/deepseekai";
 import { Assistant as OpenAIAssistant } from "../../assistants/openai";
 import { Assistant as GoogleAIAssistant } from "../../assistants/googleai";
+import { Assistant as MetaAIAssistant } from "../../assistants/metaai";
 import styles from "./Assistant.module.css";
 
 
@@ -10,7 +11,8 @@ const assistantMap = {
     deepseekaiopenrouter: OpenRouterAIAssistant,
     deepseekai: DeepSeekAIAssistant,
     openai: OpenAIAssistant,
-    googleai: GoogleAIAssistant
+    googleai: GoogleAIAssistant,
+    metaai: MetaAIAssistant,
 };
 
 export function Assistant({ onAssistantChange }) {
@@ -34,6 +36,7 @@ export function Assistant({ onAssistantChange }) {
             <span>Assistant:</span>
             <select defaultValue={value} onChange={handleValueChange}>
                 {/* <option value="deepseekai">DeepSeek AI</option> */}
+                <option value="metaai">Meta AI</option>
                 <option value="deepseekaiopenrouter">DeepSeek AI</option>
                 <option value="googleai">Google AI</option>
                 <option value="openai">OpenAI</option>
