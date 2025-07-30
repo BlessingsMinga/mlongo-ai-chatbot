@@ -1,24 +1,25 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Initialize Google Generative AI
-const googleai = new GoogleGenAI({
-  apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
 
 export class Assistant {
+  #model;
   #chat;
 
   constructor(model = "gemini-1.5-flash") {
-    // Initialize chat session
-    this.#chat = googleai.chats.create({ model });
+    this.#model = model;
   }
 
   async chat(content) {
     try {
-      const result = await this.#chat.sendMessage({ 
-        message: content 
-      });
-      return result.text();
+      if (!this.#chat) {
+        const model = genAI.getGenerativeModel({ model: this.#model });
+        this.#chat = model.startChat();
+      }
+      
+      const result = await this.#chat.sendMessage(content);
+      return result.response.text();
     } catch (error) {
       console.error("Chat error:", error);
       throw error;
@@ -27,12 +28,12 @@ export class Assistant {
 
   async *chatStream(content) {
     try {
-      const result = await this.#chat.sendMessage({ 
-        message: content 
-      });
+      const model = genAI.getGenerativeModel({ model: this.#model });
+      const chat = model.startChat();
+      
+      const result = await chat.sendMessageStream(content);
 
-      // Assuming the package supports streaming this way
-      for await (const chunk of result.stream()) {
+      for await (const chunk of result.stream) {
         yield chunk.text();
       }
     } catch (error) {

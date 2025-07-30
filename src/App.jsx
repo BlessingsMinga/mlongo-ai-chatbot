@@ -1,69 +1,70 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { Assistant } from "./component/Assistant/Assistant";
 
+
+let assistant;
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [currentAssistant, setCurrentAssistant] = useState(null);
 
-  const updateLastMessageContent = useCallback((content) => {
-    setMessages(prevMessages => 
-      prevMessages.map((message, index) => 
-        index === prevMessages.length - 1 
-          ? { ...message, content: `${message.content}${content}` } 
+  function updateLastMessageContent(content) {
+    setMessages((prevMessages) =>
+      prevMessages.map((message, index) =>
+        index === prevMessages.length - 1
+          ? { ...message, content: `${message.content}${content}` }
           : message
       )
     );
-  }, []);
+  }
 
-  const addMessage = useCallback((newMessage) => {
-    setMessages(prevMessages => [...prevMessages, newMessage]);
-  }, []);
+  function addMessage(message) {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  }
 
-  const handleContentSend = useCallback(async (content) => {
-    if (!content.trim()) return;
-    
-    if (!currentAssistant) {
-      addMessage({
-        content: "Please select an assistant first",
-        role: "system"
-      });
-      return;
-    }
-
+  async function handleContentSend(content) {
+    addMessage({ content, role: "user" });
     setIsLoading(true);
-    addMessage({ role: "user", content });
-    addMessage({ content: "", role: "assistant" });
-
     try {
-      const response = await currentAssistant.chat(content);
-      
-      setIsLoading(false);
-      setIsStreaming(true);
-      updateLastMessageContent(response);
+      const result = await assistant.chatStream(
+        content,
+        messages.filter(({ role }) => role !== "system")
+      );
+
+      let isFirstChunk = false;
+      for await (const chunk of result) {
+        if (!isFirstChunk) {
+          isFirstChunk = true;
+          addMessage({ content: "", role: "assistant" });
+          setIsLoading(false);
+          setIsStreaming(true);
+        }
+
+        updateLastMessageContent(chunk);
+      }
+
       setIsStreaming(false);
     } catch (error) {
-      console.error("Error sending message:", error);
       addMessage({
-        content: "Pepani, yesani kachikena",
-        role: "system"
+        content:
+          error?.message ??
+          "Sorry, I couldn't process your request. Please try again!",
+        role: "system",
       });
       setIsLoading(false);
       setIsStreaming(false);
     }
-  }, [currentAssistant, addMessage, updateLastMessageContent]);
+  }
 
-  const handleAssistantChange = useCallback((newAssistant) => {
-    // Only update if the assistant actually changed
-    setCurrentAssistant(prev => 
-      prev?.id === newAssistant?.id ? prev : newAssistant
-    );
-  }, []);
+  function handleAssistantChange(newAssistant) {
+    assistant = newAssistant;
+    
+  }
 
   return (
     <div className={styles.App}>
