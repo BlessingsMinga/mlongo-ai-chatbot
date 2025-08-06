@@ -45,7 +45,7 @@
 
 .Config {
   display: flex;
-  fle-wrap: wrap;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
   font-size: 14px;

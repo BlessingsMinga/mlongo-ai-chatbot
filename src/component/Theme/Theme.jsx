@@ -1,21 +1,23 @@
 import styles from "./Theme.module.css";
 
-
 export function Theme() {
-    
-    function handleValueChange() {
-
+    function handleValueChange(event) {
+        const meta = document.querySelector('meta[name="color-scheme"]');
+        meta.setAttribute("content", event.target.value);
     }
     
-    
     return (
-        <div>
-        <span>Theme</span>
-        <select defaultValue="Light dark" onChange={handleValueChange}>
-        <option value="light dark">System</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        </select>
+        <div className={styles.themeContainer}>
+            <span className={styles.themeLabel}>Theme: </span>
+            <select 
+                className={styles.themeSelect}
+                defaultValue="light dark" 
+                onChange={handleValueChange}
+            >
+                <option value="light dark">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
         </div>
     );
 }
