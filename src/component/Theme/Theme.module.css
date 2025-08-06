@@ -1,0 +1,9 @@
+.Theme {
+    display: flex;
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: rgba(46, 204, 0, 0.12);
+    border: 1px solid rgba(46, 204, 0, 0.22);
+    transition: background 0.2s, opacity 0.2s, border-color 0.2s;
+    position: relative;
+}

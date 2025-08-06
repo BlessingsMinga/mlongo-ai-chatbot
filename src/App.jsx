@@ -4,6 +4,7 @@ import { Loader } from "./component/Loader/Loader";
 import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { Assistant } from "./component/Assistant/Assistant";
+import { Theme } from "./component/Theme/Theme";
 
 
 let assistant;
@@ -91,7 +92,12 @@ function App() {
         onSend={handleContentSend}
       />
 
-      <Assistant onAssistantChange={handleAssistantChange} />
+      <div className={styles.Config}>
+           <Assistant onAssistantChange={handleAssistantChange} />
+      <Theme />
+      </div>
+
+   
     </div>
   );
 }

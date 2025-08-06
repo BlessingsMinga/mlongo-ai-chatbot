@@ -43,4 +43,12 @@
   z-index: 10;
 }
 
+.Config {
+  display: flex;
+  fle-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.8;
+}
 
