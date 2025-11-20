@@ -5,7 +5,7 @@ import Chat from "./component/Chat/Chat";
 import Controls from "./component/Controls/Controls";
 import { Assistant } from "./component/Assistant/Assistant";
 import { Theme } from "./component/Theme/Theme";
-
+import Sidebar from "./component/Sidebar/Sidebar";
 
 let assistant;
 
@@ -64,40 +64,43 @@ function App() {
 
   function handleAssistantChange(newAssistant) {
     assistant = newAssistant;
-    
   }
 
   return (
     <div className={styles.App}>
       <header className={styles.header}>
-        <img 
-          className={styles.Logo} 
-          src="/assets/chat-bot.png" 
-          alt="Chat-bot icon" 
+        <img
+          className={styles.Logo}
+          src="/assets/chat-bot.png"
+          alt="Chat-bot icon"
         />
         <h2 className={styles.Title}>Mlongo AI Bot</h2>
       </header>
-      
-      <div className={styles.ChatContainer}>
-        <Chat messages={messages} />
-        {isLoading && (
-          <div className={styles.LoaderOverlay}>
-            <Loader />
+
+      <div className={styles.Content}>
+        <Sidebar />
+
+        <main className={styles.Main}>
+          <div className={styles.ChatContainer}>
+            <Chat messages={messages} />
+            {isLoading && (
+              <div className={styles.LoaderOverlay}>
+                <Loader />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      
-      <Controls 
-        isDisabled={isLoading || isStreaming} 
-        onSend={handleContentSend}
-      />
 
-      <div className={styles.Config}>
-           <Assistant onAssistantChange={handleAssistantChange} />
-      <Theme />
-      </div>
+          <Controls
+            isDisabled={isLoading || isStreaming}
+            onSend={handleContentSend}
+          />
 
-   
+          <div className={styles.Config}>
+            <Assistant onAssistantChange={handleAssistantChange} />
+            <Theme />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

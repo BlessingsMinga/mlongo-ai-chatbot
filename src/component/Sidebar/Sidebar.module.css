@@ -1,0 +1,13 @@
+.Sidebar {
+    flex-shrink: 0;
+    width: 250px;
+    padding: 8px;
+    border-radius: 16px;
+}
+
+.Chats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+}
