@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 export class Assistant extends openaiAssistant {
  
-    constructor(model = "meta-llama/llama-3.1-8b-instruct", client = openai) {
+    constructor(model = "nousresearch/hermes-3-llama-3.1-405b:free", client = openai) {
          super(model, client);
     }
 }

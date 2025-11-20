@@ -7,7 +7,7 @@ export class Assistant {
   #model;
   #chat;
 
-  constructor(model = "gemini-1.5-flash") {
+  constructor(model = "gemini-2.5-flash") {
     this.#model = model;
   }
 
