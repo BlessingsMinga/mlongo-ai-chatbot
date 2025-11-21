@@ -1,63 +1,79 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 
-const CHATS = [
-  {
-    id: 1,
-    title: "How to use the API applications",
-  },
-  {
-    id: 2,
-    title: "Gemini Vs ChatGPT",
-  },
+const DEFAULT_CHATS = [
+  { id: 1, title: "How to use the API applications" },
+  { id: 2, title: "Gemini Vs ChatGPT" },
 ];
 
-const Sidebar = ({ chats = CHATS, activeChatId = 1 }) => {
+export default function Sidebar({ chats = DEFAULT_CHATS, activeChatId = 1 }) {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [isOpen, setIsOpen] = React.useState(true);
+  const handleSidebarToggle = () => setIsOpen((s) => !s);
 
-  function  handleSidebarToggle() { 
-    setIsOpen(!isOpen);
-  }
-
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === "Escape") setIsOpen(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   return (
     <>
-      <button className={styles.MenuButton}>
-        <MenuIcon/>
+      <button
+        className={styles.menuButton}
+        aria-label="Toggle sidebar"
+        aria-expanded={isOpen}
+        onClick={handleSidebarToggle}
+      >
+        <MenuIcon />
       </button>
 
-      <div className={styles.Sidebar} data-open={isOpen} >
-        <ul className={styles.Chats}>
+      <aside
+        className={styles.sidebar}
+        data-open={isOpen ? "true" : "false"}
+        aria-hidden={!isOpen}
+      >
+        <ul className={styles.chats}>
           {chats.map((chat) => (
             <li
               key={chat.id}
-              className={styles.chat}
-              data-active={chat.id === activeChatId}
+              className={styles.chatItem}
+              data-active={chat.id === activeChatId ? "true" : "false"}
             >
-              <button className={styles.ChatButton}>
-                <div className={styles.ChatTitle}>{chat.title}</div>
+              <button
+                className={styles.chatButton}
+                onClick={() => setIsOpen(false)}
+              >
+                <span className={styles.chatTitle}>{chat.title}</span>
               </button>
             </li>
           ))}
         </ul>
-      </div>
+      </aside>
+
+      <div
+        className={styles.overlay}
+        data-show={isOpen ? "true" : "false"}
+        onClick={() => setIsOpen(false)}
+        aria-hidden={!isOpen}
+      />
     </>
   );
-};
+}
 
 function MenuIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 -960 960 960"
-      width="24px"
-      fill="#2ecc00"
+      height="22"
+      width="22"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
     >
-      <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+      <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
     </svg>
   );
 }
-
-export default Sidebar;

@@ -1,18 +1,13 @@
-
-.Sidebar {
+.sidebar {
     flex-shrink: 0;
     width: 250px;
     padding: 8px;
     border-radius: 16px;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.25s ease-in-out;
+    transform: translateX(0);
 }
 
-.Sidebar[data-open="false"] {
-    transform: translateX(0%);
-}
-
-
-.Chats {
+.chats {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -21,8 +16,11 @@
     list-style: none;
 }
 
+.chatItem {
+    width: 100%;
+}
 
-.ChatButton {
+.chatButton {
     width: 100%;
     padding: 12px;
     border: 1px solid transparent;
@@ -31,64 +29,90 @@
     cursor: pointer;
     text-align: left;
     font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-
-.ChatButton:hover {
-    background-color: light-dark(#e0e0e0, #333333);
+.chatButton:hover {
+    background-color: #e9e9e9;
 }
 
-
-.ChatTitle {
+.chatTitle {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-
-.chat[data-active="true"] .ChatButton {
-    background-color: light-dark(#d0e7ff, #2ecc00);
+.chatItem[data-active="true"] .chatButton {
+    background-color: #2ecc00;
     border-color: transparent;
     cursor: default;
-    font-weight: 600; 
+    font-weight: 600;
 }
 
-
-@media screen and (max-width: 750px) {
-    .Sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        z-index: 2;
-        padding: 72px 8px 8px 8px;
-        background-color: light-dark(#e0e0e0, #252525ff);
-        transform: translateX(-100%);
-    }
-
-    .MenuButton {
-        display: block;
-    }
-}
-
-.MenuButton {
+.menuButton {
     display: none;
     position: fixed;
     top: 16px;
     left: 16px;
-    z-index: 3;
+    z-index: 60;
     padding: 8px;
     font-size: 16px;
     border: none;
     border-radius: 8px;
-    background-color: light-dark( #0d0d0d, #ececec);
-    color: #fff;
+    background-color: light-dark(#fff, #333);;
+    color: #2ecc00;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-.MenuButton svg {
+.menuButton svg {
     vertical-align: middle;
-    fill: light-dark( #0d0d0d, #ececec);
+    fill: currentColor;
+}
+
+.overlay {
+    display: none;
+    pointer-events: none;
+}
+
+@media screen and (max-width: 750px) {
+    .menuButton {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 240px;
+        z-index: 50;
+        padding: 72px 12px 12px;
+        background-color: light-dark( #fff, #333);
+        transform: translateX(-100%);
+    }
+
+    .sidebar[data-open="true"] {
+        transform: translateX(0);
+    }
+
+    .overlay[data-show="true"] {
+        display: block;
+        pointer-events: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 40;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.2s ease-in-out;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
