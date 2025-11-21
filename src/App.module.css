@@ -17,6 +17,7 @@
 .Logo {
   width: 64px;
   height: 64px;
+  
 }
 
 .Title {
@@ -75,4 +76,10 @@
   flex-direction: column;
   flex-grow: 1;
   gap: 16px;
+}
+
+@media screen and (max-width: 750px) {
+  .header {
+    padding-left: 16px; /* Remove sidebar padding on small screens */
+  }
 }
