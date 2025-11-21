@@ -1,3 +1,4 @@
+
 .Sidebar {
     flex-shrink: 0;
     width: 250px;
@@ -5,9 +6,58 @@
     border-radius: 16px;
 }
 
+
 .Chats {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+.ChatButton {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+
+.ChatButton:hover {
+    background-color: light-dark(#e0e0e0, #333333);
+}
+
+
+.ChatTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.chat[data-active="true"] .ChatButton {
+    background-color: light-dark(#d0e7ff, #175703ff);
+    border-color: transparent;
+    cursor: default;
+    font-weight: 600; 
+}
+
+
+@media screen and (max-width: 768px) {
+    .Sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 2;
+        padding: 72px 8px 8px 8px;
+        background-color: light-dark(#e0e0e0, #252525ff);
+    }
 }

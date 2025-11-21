@@ -17,11 +17,14 @@ const Sidebar = ({ chats = CHATS, activeChatId = 1 }) => {
     <div className={styles.Sidebar}>
       <ul className={styles.Chats}>
         {chats.map((chat) => (
-          <li 
-            key={chat.id}
-            className={chat.id === activeChatId ? styles.active : ""}
-          >
-            {chat.title}
+          <li key={chat.id} className={styles.chat} data-active={chat.id === activeChatId}>
+            <button className={styles.ChatButton}>
+              <div className={styles.ChatTitle}>
+                {chat.title}
+              </div>
+              
+            </button>
+          
           </li>
         ))}
       </ul>

@@ -7,51 +7,60 @@
   padding: 16px;
 }
 
+/* Header */
 .header {
+  padding-left: calc(250px + 16px); /* Sidebar width + gap */
   text-align: center;
 }
 
+/* FIXED typo: hieght → height */
 .Logo {
   width: 64px;
-  hieght: 64px;
+  height: 64px;
 }
 
 .Title {
   margin: 0;
 }
 
+/* Chat container */
 .ChatContainer {
   position: relative;
   flex: 1;
   overflow-y: auto;
   width: 100%;
   padding: 1rem;
-  background: light-dark( #f3f3f3, #212121);
+  background: light-dark(#f3f3f3, #212121);
   border-radius: 16px;
+
+  /* Optional: smoother scroll */
+  scrollbar-width: thin;
 }
 
+/* Loader Overlay */
 .LoaderOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0; /* Shorter version of top/left/right/bottom: 0 */
   display: flex;
   justify-content: center;
   align-items: center;
+
   background-color: rgba(255, 255, 255, 0.7);
+
   z-index: 10;
 }
 
+/* Model Config */
 .Config {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
   font-size: 14px;
-  opacity: 60%;
+  opacity: 0.6;
 }
 
+/* Layout wrapper */
 .Content {
   display: flex;
   flex-grow: 1;
@@ -60,6 +69,7 @@
   overflow: hidden;
 }
 
+/* Main content column */
 .Main {
   display: flex;
   flex-direction: column;
