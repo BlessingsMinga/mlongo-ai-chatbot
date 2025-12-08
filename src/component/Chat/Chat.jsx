@@ -4,15 +4,21 @@ import Messages from "../Messages/Messages";
 import Controls from "../Controls/Controls";
 import styles from "./Chat.module.css";
 
-export function Chat({ assistant, chatId, chatMessages }) {
+export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  // Load messages whenever chat changes
+ 
   useEffect(() => {
     setMessages(chatMessages);
-  }, [chatId, chatMessages]);
+  }, [chatId]);
+
+  useEffect(() =>{
+    onChatMessagesUpdate(messages);
+  }
+  ), [messages]
+
 
   function updateLastMessageContent(content) {
     setMessages((prevMessages) =>

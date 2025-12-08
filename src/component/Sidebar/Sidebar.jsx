@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 
-
-
-export default function Sidebar({ chats, activeChatId, onActiveChatIdChange }) {
+export default function Sidebar({ chats, activeChatId, onActiveChatIdChange, onNewChatCreate}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSidebarToggle = () => setIsOpen((s) => !s);
@@ -16,14 +14,12 @@ export default function Sidebar({ chats, activeChatId, onActiveChatIdChange }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-
-  function handleChatClick (chatId) {
+  function handleChatClick(chatId) {
     onActiveChatIdChange(chatId);
 
     if (isOpen) {
       setIsOpen(false);
     }
-
   }
 
   return (
@@ -42,6 +38,10 @@ export default function Sidebar({ chats, activeChatId, onActiveChatIdChange }) {
         data-open={isOpen ? "true" : "false"}
         aria-hidden={!isOpen}
       >
+
+        <button className={styles.NewChatButton}
+        onClick={onNewChatCreate}>New Chat</button>
+
         <ul className={styles.chats}>
           {chats.map((chat) => (
             <li
@@ -84,3 +84,5 @@ function MenuIcon() {
     </svg>
   );
 }
+
+

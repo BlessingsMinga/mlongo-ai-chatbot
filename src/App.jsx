@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import styles from "./App.module.css";
 
 import { Chat } from "./component/Chat/Chat";
@@ -38,6 +39,27 @@ function App() {
     setAssistant(newAssistant);
   }
 
+  
+
+  function updateChats(messages = []) {
+     setChats((prevChats) =>prevChats.map ((chat) =>
+    chat.id === activeChatId ? { ...chat, messages } : chat
+    
+    ))
+  }
+
+  function handleChatMessagesUpdate(messages) {
+    updateChats(messages);
+  }
+
+  function handleNewChatCreate() {
+    const id = uuidv4(); // ⇨ '23c37ede-1c09-422a-8da8-42ad65cc33f9'
+
+    setActiveChatId(id)
+    setChats((prevChats) => [...prevChats, {id, title: "New Chat", messages: [] }]);
+
+  }
+
   return (
     <div className={styles.App}>
       {/* Header */}
@@ -56,6 +78,7 @@ function App() {
           chats={chats}
           activeChatId={activeChatId}
           onActiveChatIdChange={setActiveChatId}
+          onNewChatCreate={handleNewChatCreate}
         />
 
         <main className={styles.Main}>
@@ -63,6 +86,7 @@ function App() {
             assistant={assistant}
             chatId={activeChatId}
             chatMessages={activeChatMessages}
+            onChatMessagesUpdate={handleChatMessagesUpdate}
           />
 
           <div className={styles.Config}>
