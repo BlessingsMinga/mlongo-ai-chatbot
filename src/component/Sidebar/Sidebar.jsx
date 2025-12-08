@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 
-const DEFAULT_CHATS = [
-  { id: 1, title: "How to use the API applications" },
-  { id: 2, title: "Gemini Vs ChatGPT" },
-];
 
-export default function Sidebar({ chats = DEFAULT_CHATS, activeChatId = 1 }) {
+
+export default function Sidebar({ chats, activeChatId, onActiveChatIdChange }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSidebarToggle = () => setIsOpen((s) => !s);
@@ -18,6 +15,16 @@ export default function Sidebar({ chats = DEFAULT_CHATS, activeChatId = 1 }) {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
+
+
+  function handleChatClick (chatId) {
+    onActiveChatIdChange(chatId);
+
+    if (isOpen) {
+      setIsOpen(false);
+    }
+
+  }
 
   return (
     <>
@@ -44,7 +51,7 @@ export default function Sidebar({ chats = DEFAULT_CHATS, activeChatId = 1 }) {
             >
               <button
                 className={styles.chatButton}
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleChatClick(chat.id)}
               >
                 <span className={styles.chatTitle}>{chat.title}</span>
               </button>

@@ -1,73 +1,46 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "./App.module.css";
-import { Loader } from "./component/Loader/Loader";
-import Messages from "./component/Messages/Messages";
-import Controls from "./component/Controls/Controls";
+
+import { Chat } from "./component/Chat/Chat";
 import { Assistant } from "./component/Assistant/Assistant";
 import { Theme } from "./component/Theme/Theme";
 import Sidebar from "./component/Sidebar/Sidebar";
 
-let assistant;
+const CHATS = [
+  { 
+    id: 1,
+    title: "How to use the API applications",
+    messages: [
+      { role: "user", content: "Kodi nthawi ili bwanji?" },
+      { role: "assistant", content: "Zikomo" }
+    ]
+  },
+  { 
+    id: 2,
+    title: "Gemini Vs ChatGPT",
+    messages: [
+      { role: "user", content: "Kodi nthawi ili bwanji?" },
+      { role: "assistant", content: "Zikomo" }
+    ]
+  }
+];
 
 function App() {
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [assistant, setAssistant] = useState(null);
+  const [chats, setChats] = useState(CHATS);
+  const [activeChatId, setActiveChatId] = useState(2);
 
-  function updateLastMessageContent(content) {
-    setMessages((prevMessages) =>
-      prevMessages.map((message, index) =>
-        index === prevMessages.length - 1
-          ? { ...message, content: `${message.content}${content}` }
-          : message
-      )
-    );
-  }
-
-  function addMessage(message) {
-    setMessages((prevMessages) => [...prevMessages, message]);
-  }
-
-  async function handleContentSend(content) {
-    addMessage({ content, role: "user" });
-    setIsLoading(true);
-    try {
-      const result = await assistant.chatStream(
-        content,
-        messages.filter(({ role }) => role !== "system")
-      );
-
-      let isFirstChunk = false;
-      for await (const chunk of result) {
-        if (!isFirstChunk) {
-          isFirstChunk = true;
-          addMessage({ content: "", role: "assistant" });
-          setIsLoading(false);
-          setIsStreaming(true);
-        }
-
-        updateLastMessageContent(chunk);
-      }
-
-      setIsStreaming(false);
-    } catch (error) {
-      addMessage({
-        content:
-          error?.message ??
-          "Sorry, I couldn't process your request. Please try again!",
-        role: "system",
-      });
-      setIsLoading(false);
-      setIsStreaming(false);
-    }
-  }
+  const activeChatMessages = useMemo(() => {
+    return chats.find(({ id }) => id === activeChatId)?.messages ?? [];
+  }, [chats, activeChatId]);
 
   function handleAssistantChange(newAssistant) {
-    assistant = newAssistant;
+    setAssistant(newAssistant);
   }
 
   return (
     <div className={styles.App}>
+      {/* Header */}
       <header className={styles.header}>
         <img
           className={styles.Logo}
@@ -77,22 +50,19 @@ function App() {
         <h2 className={styles.Title}>Mlongo AI Bot</h2>
       </header>
 
+      {/* Main Content */}
       <div className={styles.Content}>
-        <Sidebar />
+        <Sidebar
+          chats={chats}
+          activeChatId={activeChatId}
+          onActiveChatIdChange={setActiveChatId}
+        />
 
         <main className={styles.Main}>
-          <div className={styles.ChatContainer}>
-            <Messages messages={messages} />
-            {isLoading && (
-              <div className={styles.LoaderOverlay}>
-                <Loader />
-              </div>
-            )}
-          </div>
-
-          <Controls
-            isDisabled={isLoading || isStreaming}
-            onSend={handleContentSend}
+          <Chat
+            assistant={assistant}
+            chatId={activeChatId}
+            chatMessages={activeChatMessages}
           />
 
           <div className={styles.Config}>
