@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./App.module.css";
 import { Loader } from "./component/Loader/Loader";
-import Chat from "./component/Chat/Chat";
+import Messages from "./component/Messages/Messages";
 import Controls from "./component/Controls/Controls";
 import { Assistant } from "./component/Assistant/Assistant";
 import { Theme } from "./component/Theme/Theme";
@@ -82,7 +82,7 @@ function App() {
 
         <main className={styles.Main}>
           <div className={styles.ChatContainer}>
-            <Chat messages={messages} />
+            <Messages messages={messages} />
             {isLoading && (
               <div className={styles.LoaderOverlay}>
                 <Loader />

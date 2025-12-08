@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import styles from "./Chat.module.css";
+import styles from "./Messages.module.css";
 import Markdown from 'react-markdown';
 
 const WELCOME_MESSAGE_GROUP = [
@@ -9,7 +9,7 @@ const WELCOME_MESSAGE_GROUP = [
   },
 ];
 
-const Chat = ({ messages = [] }) => {
+const Messages = ({ messages = [] }) => {
   const messagesEndRef = useRef(null);
 
   // Group messages by conversation turns (user + assistant pairs)
@@ -32,7 +32,7 @@ const Chat = ({ messages = [] }) => {
   }, [messages]);
 
   return (
-    <div className={styles.Chat}>
+    <div className={styles.Messages}>
       {[WELCOME_MESSAGE_GROUP, ...messagesGroups].map((group, groupIndex) => (
         <div key={groupIndex} className={styles.Group}>
           {group.map(({ role, content }, index) => (
@@ -65,4 +65,4 @@ const Chat = ({ messages = [] }) => {
   );
 };
 
-export default Chat;
+export default Messages;
