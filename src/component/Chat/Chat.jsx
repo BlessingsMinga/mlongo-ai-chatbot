@@ -5,7 +5,13 @@ import Controls from "../Controls/Controls";
 import styles from "./Chat.module.css";
 
 
-export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) {
+export function Chat({ 
+  assistant, 
+  chatId, 
+  chatMessages, 
+  onChatMessagesUpdate,
+  isActive = false,
+}) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -22,7 +28,7 @@ export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) 
   }, [chatId]);
 
   useEffect(() =>{
-    onChatMessagesUpdate(messages);
+    onChatMessagesUpdate(chatId, messages);
   }, [messages]);
 
 
@@ -83,6 +89,8 @@ export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) 
       setIsStreaming(false);
     }
   }
+
+  if (!isActive) return null;
 
   return (
     <>
