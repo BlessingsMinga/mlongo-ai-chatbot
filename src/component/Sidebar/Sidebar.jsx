@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 
-export default function Sidebar({ chats, activeChatId, onActiveChatIdChange, onNewChatCreate}) {
+export default function Sidebar({
+  chats,
+  activeChatId,
+  onActiveChatIdChange,
+  onNewChatCreate,
+  activeChatMessages,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSidebarToggle = () => setIsOpen((s) => !s);
@@ -38,25 +44,31 @@ export default function Sidebar({ chats, activeChatId, onActiveChatIdChange, onN
         data-open={isOpen ? "true" : "false"}
         aria-hidden={!isOpen}
       >
-
-        <button className={styles.NewChatButton}
-        onClick={onNewChatCreate}>New Chat</button>
+        <button
+          className={styles.NewChatButton}
+          disabled={activeChatMessages.length === 0}
+          onClick={onNewChatCreate}
+        >
+          New Chat
+        </button>
 
         <ul className={styles.chats}>
-          {chats.map((chat) => (
-            <li
-              key={chat.id}
-              className={styles.chatItem}
-              data-active={chat.id === activeChatId ? "true" : "false"}
-            >
-              <button
-                className={styles.chatButton}
-                onClick={() => handleChatClick(chat.id)}
+          {chats
+            .filter(({ messages }) => messages.length > 0)
+            .map((chat) => (
+              <li
+                key={chat.id}
+                className={styles.chatItem}
+                data-active={chat.id === activeChatId ? "true" : "false"}
               >
-                <span className={styles.chatTitle}>{chat.title}</span>
-              </button>
-            </li>
-          ))}
+                <button
+                  className={styles.chatButton}
+                  onClick={() => handleChatClick(chat.id)}
+                >
+                  <span className={styles.chatTitle}>{chat.title}</span>
+                </button>
+              </li>
+            ))}
         </ul>
       </aside>
 
@@ -84,5 +96,3 @@ function MenuIcon() {
     </svg>
   );
 }
-
-

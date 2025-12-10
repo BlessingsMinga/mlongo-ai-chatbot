@@ -9,7 +9,7 @@ import Sidebar from "./component/Sidebar/Sidebar";
 
 const CHATS = [
   { 
-    id: 1,
+    id: "1",
     title: "How to use the API applications",
     messages: [
       { role: "user", content: "Kodi nthawi ili bwanji?" },
@@ -17,7 +17,7 @@ const CHATS = [
     ]
   },
   { 
-    id: 2,
+    id: "2",
     title: "Gemini Vs ChatGPT",
     messages: [
       { role: "user", content: "Kodi nthawi ili bwanji?" },
@@ -29,7 +29,7 @@ const CHATS = [
 function App() {
   const [assistant, setAssistant] = useState(null);
   const [chats, setChats] = useState(CHATS);
-  const [activeChatId, setActiveChatId] = useState(2);
+  const [activeChatId, setActiveChatId] = useState("2");
 
   const activeChatMessages = useMemo(() => {
     return chats.find(({ id }) => id === activeChatId)?.messages ?? [];
@@ -39,25 +39,42 @@ function App() {
     setAssistant(newAssistant);
   }
 
-  
-
-  function updateChats(messages = []) {
-     setChats((prevChats) =>prevChats.map ((chat) =>
-    chat.id === activeChatId ? { ...chat, messages } : chat
-    
-    ))
+  // ---- FIXED updateChats (title now passed in correctly) ----
+  function updateChats(messages = [], title) {
+    setChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.id === activeChatId
+          ? { ...chat, title: title ?? chat.title, messages }
+          : chat
+      )
+    );
   }
 
+  // ---- Generate chat title from first user message ----
   function handleChatMessagesUpdate(messages) {
-    updateChats(messages);
+    const title = messages[0]?.content
+      .split(" ")
+      .slice(0, 7)
+      .join(" ");
+
+    updateChats(messages, title);
   }
 
+  
   function handleNewChatCreate() {
-    const id = uuidv4(); // ⇨ '23c37ede-1c09-422a-8da8-42ad65cc33f9'
+    const id = uuidv4();
 
-    setActiveChatId(id)
-    setChats((prevChats) => [...prevChats, {id, title: "New Chat", messages: [] }]);
+    setChats((prevChats) => [
+      ...prevChats,
+      { id, title: "New Chat", messages: [] }
+    ]);
 
+    setActiveChatId(id);
+  }
+
+  
+  function handleActiveChatChange(id) {
+    setActiveChatId(id);
   }
 
   return (
@@ -72,12 +89,13 @@ function App() {
         <h2 className={styles.Title}>Mlongo AI Bot</h2>
       </header>
 
-      {/* Main Content */}
+
       <div className={styles.Content}>
         <Sidebar
           chats={chats}
           activeChatId={activeChatId}
-          onActiveChatIdChange={setActiveChatId}
+          activeChatMessages={activeChatMessages}
+          onActiveChatIdChange={handleActiveChatChange}
           onNewChatCreate={handleNewChatCreate}
         />
 
