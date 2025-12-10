@@ -25,7 +25,7 @@ export class Assistant {
             });
 
             if (!result.choices?.[0]?.message?.content) {
-                throw new Error("No response content from OpenAI");
+                throw new Error("Palibe zomwe zabwera kuchokera ku OpenAI");
             }
 
             return result.choices[0].message.content;

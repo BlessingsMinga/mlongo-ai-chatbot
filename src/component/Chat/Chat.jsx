@@ -4,6 +4,7 @@ import Messages from "../Messages/Messages";
 import Controls from "../Controls/Controls";
 import styles from "./Chat.module.css";
 
+
 export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,13 +12,18 @@ export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) 
 
  
   useEffect(() => {
+    
     setMessages(chatMessages);
+
+    if (assistant?.name === "googleai") {
+      assistant.createChat(chatMessages);
+    }
+    
   }, [chatId]);
 
   useEffect(() =>{
     onChatMessagesUpdate(messages);
-  }
-  ), [messages]
+  }, [messages]);
 
 
   function updateLastMessageContent(content) {
@@ -38,7 +44,7 @@ export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) 
     if (!assistant) {
       addMessage({
         role: "system",
-        content: "Please select an assistant first.",
+        content: "Chonde sankhani wothandizira koyamba",
       });
       return;
     }
@@ -70,7 +76,7 @@ export function Chat({ assistant, chatId, chatMessages, onChatMessagesUpdate }) 
       addMessage({
         content:
           error?.message ??
-          "Sorry, I couldn't process your request. Please try again!",
+          "Pepani, sindinathe kukonza pempho lanu. Chonde yesaninso!",
         role: "system",
       });
       setIsLoading(false);
