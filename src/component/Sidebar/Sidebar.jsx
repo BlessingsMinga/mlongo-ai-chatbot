@@ -22,10 +22,7 @@ export default function Sidebar({
 
   function handleChatClick(chatId) {
     onActiveChatIdChange(chatId);
-
-    if (isOpen) {
-      setIsOpen(false);
-    }
+    if (isOpen) setIsOpen(false);
   }
 
   return (
@@ -49,6 +46,7 @@ export default function Sidebar({
           disabled={activeChatMessages.length === 0}
           onClick={onNewChatCreate}
         >
+          <PlusIcon />
           New Chat
         </button>
 
@@ -90,9 +88,26 @@ function MenuIcon() {
       width="22"
       viewBox="0 0 24 24"
       fill="currentColor"
-      aria-hidden="true"
     >
       <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 5v14M5 12h14" />
     </svg>
   );
 }

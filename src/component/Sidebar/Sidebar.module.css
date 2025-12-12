@@ -1,3 +1,16 @@
+:root {
+    --radius: 12px;
+    --radius-lg: 16px;
+
+    --color-accent: #2ecc00;
+
+    --color-light-bg: #ffffff;
+    --color-light-text: #0d0d0d;
+
+    --color-dark-bg: #171717;
+    --color-dark-text: #ececec;
+}
+
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -5,9 +18,10 @@
     flex-shrink: 0;
     width: 250px;
     padding: 8px;
-    border-radius: 0px 16px;
-    transition: transform 0.25s ease-in-out;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    background: none;
     transform: translateX(0);
+    transition: transform 0.25s ease-in-out;
 }
 
 .chats {
@@ -27,32 +41,58 @@
     width: 100%;
     padding: 12px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: var(--radius);
     background: none;
     cursor: pointer;
     text-align: left;
     font-size: 14px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.chatButton:hover {
-    background-color: light-dark( #171717,rgb(255, 255, 255));
-    color: light-dark(  #ececec, #0d0d0d);
-}
-
-.chatTitle {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.chatButton:hover:not([disabled]) {
+    background-color: light-dark(var(--color-light-bg), var(--color-dark-bg));
+    color: light-dark(var(--color-dark-text), var(--color-light-text));
 }
 
 .chatItem[data-active="true"] .chatButton {
-    background-color: #2ecc00;
+    background-color: var(--color-accent);
     border-color: transparent;
     cursor: default;
     font-weight: 600;
+}
+
+.NewChatButton {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed light-dark(var(--color-dark-bg), var(--color-light-bg));
+    border-radius: var(--radius);
+    background: none;
+    cursor: pointer;
+    color: light-dark(var(--color-dark-bg), var(--color-light-bg));
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.NewChatButton:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.NewChatButton svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+}
+
+.NewChatButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .menuButton {
@@ -61,12 +101,12 @@
     top: 16px;
     left: 16px;
     z-index: 10;
-    padding: 8px;
-    font-size: 16px;
+    padding: 8px 10px;
     border: none;
-    border-radius: 8px;
-    background-color: light-dark(#fff, #333);;
-    color: #2ecc00;
+    border-radius: var(--radius);
+    font-size: 18px;
+    background-color: light-dark(var(--color-light-bg), var(--color-dark-bg));
+    color: var(--color-accent);
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -94,7 +134,8 @@
         width: 240px;
         z-index: 50;
         padding: 72px 12px 12px;
-        background-color: light-dark( #fff, #333);
+        background-color: light-dark(var(--color-light-bg), var(--color-dark-bg));
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
         transform: translateX(-100%);
     }
 
@@ -106,10 +147,7 @@
         display: block;
         pointer-events: auto;
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
+        inset: 0;
         z-index: 40;
         background-color: rgba(0, 0, 0, 0.5);
         animation: fadeIn 0.2s ease-in-out;
@@ -119,21 +157,4 @@
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-
-.NewChatButton {
-  width: 100%;
-  padding: 12px;
-  background: none;
-  border: 2px dashed light-dark( #171717,rgb(255, 255, 255));
-  border-radius: 8px;
-  text-align: center;
-  cursor: pointer;
-  color: light-dark( #171717,rgb(255, 255, 255));
-}
-
-.NewChatButton:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
