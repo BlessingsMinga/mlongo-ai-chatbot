@@ -176,3 +176,13 @@
     height: 28px;
   }
 }
+
+.Markdown pre {
+  white-space: pre-wrap;
+}
+
+.Markdown pre:has(code) {
+  padding: 8px;
+  border-radius: 8px;
+  background: light-dark( #f3f3f3, #212121);
+}

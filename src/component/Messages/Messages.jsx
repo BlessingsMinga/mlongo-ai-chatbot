@@ -53,7 +53,9 @@ const Messages = ({ messages = [] }) => {
                   </div>
                 )}
                 <div className={styles.Text}>
-                  <Markdown>{content}</Markdown>
+                  <div className={styles.Markdown}> 
+                  <Markdown >{content}</Markdown>
+                  </div>
                 </div>
               </div>
             </div>
