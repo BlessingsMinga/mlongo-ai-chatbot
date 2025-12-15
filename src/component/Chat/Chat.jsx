@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader } from "../Loader/Loader";
 import Messages from "../Messages/Messages";
 import Controls from "../Controls/Controls";
@@ -15,6 +15,7 @@ export function Chat({
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const lastSavedLengthRef = useRef(0);
 
  
   useEffect(() => {
@@ -89,6 +90,38 @@ export function Chat({
       setIsStreaming(false);
     }
   }
+
+  async function saveChatToServer() {
+    if (!chatId) return;
+    const title = messages?.[0]?.content
+      ? messages[0].content.split(" ").slice(0, 7).join(" ")
+      : "Untitled";
+
+    try {
+      await fetch(`/api/chats/${chatId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, messages }),
+      });
+    } catch (e) {
+      // ignore save errors for now
+    }
+  }
+
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) return;
+    // only save when assistant finished responding
+    if (
+      !isStreaming &&
+      !isLoading &&
+      lastMessage.role === "assistant" &&
+      lastSavedLengthRef.current !== messages.length
+    ) {
+      saveChatToServer();
+      lastSavedLengthRef.current = messages.length;
+    }
+  }, [messages, isStreaming, isLoading, chatId]);
 
   if (!isActive) return null;
 

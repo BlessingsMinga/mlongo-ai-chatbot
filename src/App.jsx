@@ -18,7 +18,21 @@ function App() {
   }, [chats, activeChatId]);
 
   useEffect(() => {
-    handleNewChatCreate();
+    // load chats from backend on start, then select first or create new
+    fetch('/api/chats')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) {
+          handleNewChatCreate();
+          return;
+        }
+        setChats(data);
+        setActiveChatId(data[0].id);
+      })
+      .catch(() => {
+        // if backend not available, fall back to an in-memory chat
+        handleNewChatCreate();
+      });
   }, []);
 
   function handleAssistantChange(newAssistant) {
@@ -51,12 +65,16 @@ function App() {
   function handleNewChatCreate() {
     const id = uuidv4();
 
-    setChats((prevChats) => [
-      ...prevChats,
-      { id, title: "New Chat", messages: [] },
-    ]);
-
+    const newChat = { id, title: 'New Chat', messages: [] };
+    setChats((prevChats) => [...prevChats, newChat]);
     setActiveChatId(id);
+
+    // persist empty chat on server with clientId so it appears on reload
+    fetch('/api/chats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientId: id, title: newChat.title, messages: newChat.messages }),
+    }).catch(() => {});
   }
 
   function handleActiveChatChange(id) {
@@ -78,6 +96,7 @@ function App() {
       <div className={styles.Content}>
         <Sidebar
           chats={chats}
+          setChats={setChats}
           activeChatId={activeChatId}
           activeChatMessages={activeChatMessages}
           onActiveChatIdChange={handleActiveChatChange}

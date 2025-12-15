@@ -3,6 +3,7 @@ import styles from "./Sidebar.module.css";
 
 export default function Sidebar({
   chats,
+  setChats = () => {},
   activeChatId,
   onActiveChatIdChange,
   onNewChatCreate,
@@ -19,6 +20,8 @@ export default function Sidebar({
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  // Sidebar is presentation-only; loading is handled by App
 
   function handleChatClick(chatId) {
     onActiveChatIdChange(chatId);
