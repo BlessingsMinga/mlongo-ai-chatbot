@@ -1,9 +1,8 @@
 
-<img width="302" height="609" alt="Screenshot 2025-12-12 at 22-05-30 " src="https://github.com/user-attachments/assets/e5ae4ff8-8664-4f35-aab4-7db038bdfbf3" />
 
 
-<img width="1099" height="638" alt="Screenshot 2025-12-12 at 22-05-06 " src="https://github.com/user-attachments/assets/d6c1b2a6-347a-4d47-a45f-542724282000" />
-
+<img width="1099" height="638" alt="Screenshot 2025-12-12 at 22-05-06 " src="https://github.com/user-attachments/assets/516979da-5ed1-4a12-a3e1-9723c71c610d" />
+<img width="302" height="609" alt="Screenshot 2025-12-12 at 22-05-30 " src="https://github.com/user-attachments/assets/ab4ea45b-26af-4fed-acb2-074570a71758" />
 
 mlongo-ai-chatbot
 =================
